@@ -51,11 +51,9 @@ Utilise cette voie si tu veux **voir l’app tourner le plus vite possible**, sa
 
 ```powershell
 cd $env:USERPROFILE\Documents
-git clone <URL_DU_DEPOT> MyFood
+git clone https://github.com/suufiaane13/MyFood
 cd MyFood
 ```
-
-Remplace `<URL_DU_DEPOT>` par l’URL Git du projet (GitHub, GitLab, etc.).
 
 **Sans Git :** télécharge le projet en ZIP, décompresse-le (ex. `C:\Users\TonNom\Documents\MyFood`).
 
