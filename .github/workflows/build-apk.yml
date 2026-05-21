@@ -1,0 +1,51 @@
+name: Build & Release APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Rename APK
+        run: mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/MyFood.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: "MyFood — Build #${{ github.run_number }}"
+          body: |
+            **Build automatique** déclenché par le commit `${{ github.sha }}`.
+
+            ### Installer
+            1. Télécharge `MyFood.apk` ci-dessous
+            2. Envoie-le sur ton téléphone
+            3. Autorise les sources inconnues et installe
+          files: app/build/outputs/apk/debug/MyFood.apk
+          draft: false
+          prerelease: false
